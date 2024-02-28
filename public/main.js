@@ -44,6 +44,11 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
     .nice()
     .range([height, 0]);
 
+  const category = ["OCCURRED DAY", "OCCURRED NIGHT"];
+  const colors = d3.scaleOrdinal()
+  .domain(category)
+  .range(["#FDDA0D","#3c005a"]);
+
     // Creates the actual bars on the graph
     svg.selectAll(".bar")
     .data(countData)
@@ -53,13 +58,41 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
     .attr("x", d => xAxis(d.time))
     .attr("y", d => yAxis(d.count))
     .attr("width", xAxis.bandwidth())
-    .attr("height", d => height - yAxis(d.count));
-
+    .attr("height", d => height - yAxis(d.count))
+    .attr("fill", d => colors(d.time));
+    
+    // creates the numeric labels for x & y axis
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xAxis));
 
     svg.append("g")
       .call(d3.axisLeft(yAxis));
+    
+    // Creates the title label
+    svg.append("text")
+      .attr("x", (width + margin.left + margin.right) / 2.6)
+      .attr("y", margin.top - 140)
+      .attr("text-anchor", "middle")
+      .style("font-size", "18px")
+      .style("font-weight", "bold")
+      .text("How Much Does Crime Rate Differ Between Day and Night?");
+
+    // label for x-axis
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", height + margin.bottom - 10)
+      .style("text-anchor", "middle")
+      .style("font-weight", "bold")
+      .text("Crime Day vs. Crime Night");
+
+     // label for y-axis
+     svg.append("text")
+     .attr("transform", "rotate(-90)")
+     .attr("x", -height / 2)
+     .attr("y", -margin.left + 50)
+     .style("text-anchor", "middle")
+     .style("font-weight", "bold")
+     .text("Amount of Crime Occurring in One Month");
 
 });
