@@ -29,8 +29,8 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
   });
 
   const countData = [
-    { time: 'Crime during Day', count: countDay },
-    { time: 'Crime during Night', count: countNight }
+    { time: 'Daytime Crime', count: countDay },
+    { time: 'Nighttime Crime', count: countNight }
   ];
 
   // Creates the x-axis & y-axis scales
@@ -44,7 +44,7 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
     .nice()
     .range([height, 0]);
 
-  const category = ["OCCURRED DAY", "OCCURRED NIGHT"];
+  const category = ["Daytime Crime", "Nighttime Crime"];
   const colors = d3.scaleOrdinal()
   .domain(category)
   .range(["#FDDA0D","#3c005a"]);
@@ -72,11 +72,17 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
     // Creates the title label
     svg.append("text")
       .attr("x", (width + margin.left + margin.right) / 2.6)
-      .attr("y", margin.top - 140)
+      .attr("y", margin.top - 160)
       .attr("text-anchor", "middle")
       .style("font-size", "18px")
       .style("font-weight", "bold")
-      .text("How Much Does Crime Rate Differ Between Day and Night?");
+      .text("How do crime rates vary between day and night throughout the course of a month?");
+
+      svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", margin.top - 125) // Adjust the y position as needed
+      .style("text-anchor", "middle")
+      .text("Daytime is considered 8am - 5pm | Nighttime is considered 8pm - 5am");
 
     // label for x-axis
     svg.append("text")
@@ -84,7 +90,7 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
       .attr("y", height + margin.bottom - 10)
       .style("text-anchor", "middle")
       .style("font-weight", "bold")
-      .text("Crime Day vs. Crime Night");
+      .text("Daytime Crime vs. Nighttime Crime");
 
      // label for y-axis
      svg.append("text")
@@ -93,6 +99,29 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
      .attr("y", -margin.left + 50)
      .style("text-anchor", "middle")
      .style("font-weight", "bold")
-     .text("Amount of Crime Occurring in One Month");
+     .text("Average Monthly Crimes");
 
+     // Creates legend to specify the data
+     const legend = svg.selectAll(".legend")
+        .data(category)
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+        .attr("x", width)
+        .attr("width", 15)
+        .attr("height", 15)
+        .style("fill", function(d) {
+          return colors(d);
+        });
+
+        legend.append("text")
+        .attr("x", width - 10)
+        .attr("y", 7)
+        .attr("dy", ".30em")
+        .style("text-anchor", "end")
+        .text(function(d) {
+          return d;
+        });
 });
