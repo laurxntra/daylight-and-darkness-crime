@@ -1,4 +1,4 @@
-// console.log("Add your visualizations here!");
+/* THIS SECTION IS SPECIFICALLY FOR VISUALIZATION 1, SCROLL DOWN FOR VISUALIZATION #2 */
 
 // Display of the visual bar chart
 const width = 800;
@@ -7,7 +7,7 @@ const margin = { top: 100, bottom: 50, left: 100, right: 100 };
 const barPadding = 0.15;
 
 // creates svg element in the <div id = "chart"> in our index.html
-const svg = d3.select("#chart").append("svg")
+const svg = d3.select("#chart1").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -125,3 +125,5 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
           return d;
         });
 });
+
+/* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
