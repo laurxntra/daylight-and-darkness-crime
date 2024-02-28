@@ -7,7 +7,7 @@ const margin = { top: 100, bottom: 50, left: 100, right: 100 };
 const barPadding = 0.15;
 
 // creates svg element in the <div id = "chart"> in our index.html
-const svg = d3.select("#chart1").append("svg")
+const svg1 = d3.select("#chart1").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -50,7 +50,7 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
   .range(["#FDDA0D","#3c005a"]);
 
     // Creates the actual bars on the graph
-    svg.selectAll(".bar")
+    svg1.selectAll(".bar")
     .data(countData)
     .enter()
     .append("rect")
@@ -62,15 +62,15 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
     .attr("fill", d => colors(d.time));
     
     // creates the numeric labels for x & y axis
-    svg.append("g")
+    svg1.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xAxis));
 
-    svg.append("g")
+    svg1.append("g")
       .call(d3.axisLeft(yAxis));
     
     // Creates the title label
-    svg.append("text")
+    svg1.append("text")
       .attr("x", (width + margin.left + margin.right) / 2.6)
       .attr("y", margin.top - 160)
       .attr("text-anchor", "middle")
@@ -78,14 +78,14 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
       .style("font-weight", "bold")
       .text("How do crime rates vary between day and night throughout the course of a month?");
 
-      svg.append("text")
+      svg1.append("text")
       .attr("x", width / 2)
       .attr("y", margin.top - 125) // Adjust the y position as needed
       .style("text-anchor", "middle")
       .text("Daytime is considered 8am - 5pm | Nighttime is considered 8pm - 5am");
 
     // label for x-axis
-    svg.append("text")
+    svg1.append("text")
       .attr("x", width / 2)
       .attr("y", height + margin.bottom - 10)
       .style("text-anchor", "middle")
@@ -93,7 +93,7 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
       .text("Daytime Crime vs. Nighttime Crime");
 
      // label for y-axis
-     svg.append("text")
+     svg1.append("text")
      .attr("transform", "rotate(-90)")
      .attr("x", -height / 2)
      .attr("y", -margin.left + 50)
@@ -102,7 +102,7 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
      .text("Average Monthly Crimes");
 
      // Creates legend to specify the data
-     const legend = svg.selectAll(".legend")
+     const legend = svg1.selectAll(".legend")
         .data(category)
         .enter().append("g")
         .attr("class", "legend")
@@ -127,3 +127,32 @@ d3.csv("data/day-night-data - Sheet1.csv").then(function(data) {
 });
 
 /* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
+
+const svg2 = d3.select("#chart2").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("data/types-of-crimes-totals - Sheet1.csv").then(function(data) {
+      const dayData = {
+        "LARCENY-THEFT": +data[0]["LARCENY-THEFT DAY"],
+        "BURGLARY": +data[0]["BURGLARY DAY"],
+        "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT DAY"],
+        "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT DAY"],
+        "DRUG OFFENSE": +data[0]["DRUG OFFENSE"],
+        "OTHER": +data[0]["OTHER DAY"]
+      };
+
+      const nightData = {
+        "LARCENY-THEFT": +data[0]["LARCENY-THEFT NIGHT"],
+        "BURGLARY": +data[0]["BURGLARY NIGHT"],
+        "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT NIGHT"],
+        "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT NIGHT"],
+        "DRUG OFFENSE": +data[0]["DRUG OFFENSE NIGHT"],
+        "OTHER": +data[0]["OTHER NIGHT"]
+      };
+      
+      
+
+  })
