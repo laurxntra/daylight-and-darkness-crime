@@ -136,8 +136,8 @@ const svg2 = d3.select("#chart2").append("svg")
 
   d3.csv("data/types-of-crimes-totals - Sheet1.csv").then(function(data) {
       const dayData = [
-        {type: 'LARCENY-THEFT', count: data[0]["LARCENY-THEFT DAY"]}
-        {type: 'BURGLARY', count: data[0]["BURGLARY DAY"]}
+        {type: 'LARCENY-THEFT', count: data[0]["LARCENY-THEFT DAY"]},
+        {type: 'BURGLARY', count: data[0]["BURGLARY DAY"]},
         {type: 'MOTOR-VEHICLE THEFT', count: data[0]["MOTOR-VEHICLE THEFT DAY"]}
         // "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT DAY"],
         // "DRUG OFFENSE": +data[0]["DRUG OFFENSE DAY"],
@@ -171,7 +171,7 @@ const svg2 = d3.select("#chart2").append("svg")
         .nice()
         .range([height, 0]);
 
-        const category = ["Larceny-Theft", "Burglary", "Motor-Vehicle Theft"];
+      const category = ["Larceny-Theft", "Burglary", "Motor-Vehicle Theft"];
       const colors = d3.scaleOrdinal()
       .domain(category)
       .range(["#FDDA0D","#3c005a"]);
