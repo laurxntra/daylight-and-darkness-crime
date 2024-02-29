@@ -135,30 +135,65 @@ const svg2 = d3.select("#chart2").append("svg")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   d3.csv("data/types-of-crimes-totals - Sheet1.csv").then(function(data) {
-      const dayData = {
-        "LARCENY-THEFT": +data[0]["LARCENY-THEFT DAY"],
-        "BURGLARY": +data[0]["BURGLARY DAY"],
-        "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT DAY"],
-        "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT DAY"],
-        "DRUG OFFENSE": +data[0]["DRUG OFFENSE DAY"],
-        "OTHER": +data[0]["OTHER DAY"]
-      };
+      const dayData = [
+        {type: 'LARCENY-THEFT', count: data[0]["LARCENY-THEFT DAY"]}
+        {type: 'BURGLARY', count: data[0]["BURGLARY DAY"]}
+        {type: 'MOTOR-VEHICLE THEFT', count: data[0]["MOTOR-VEHICLE THEFT DAY"]}
+        // "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT DAY"],
+        // "DRUG OFFENSE": +data[0]["DRUG OFFENSE DAY"],
+        // "OTHER": +data[0]["OTHER DAY"]
+      ];
 
-      const nightData = {
-        "LARCENY-THEFT": +data[0]["LARCENY-THEFT NIGHT"],
-        "BURGLARY": +data[0]["BURGLARY NIGHT"],
-        "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT NIGHT"],
-        "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT NIGHT"],
-        "DRUG OFFENSE": +data[0]["DRUG OFFENSE NIGHT"],
-        "OTHER": +data[0]["OTHER NIGHT"]
-      };
+      // const nightData = {
+      //   "LARCENY-THEFT": +data[0]["LARCENY-THEFT NIGHT"],
+      //   "BURGLARY": +data[0]["BURGLARY NIGHT"],
+      //   "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT NIGHT"],
+      //   "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT NIGHT"],
+      //   "DRUG OFFENSE": +data[0]["DRUG OFFENSE NIGHT"],
+      //   "OTHER": +data[0]["OTHER NIGHT"]
+      // };
       
-      let countBothLT = +data[0]['LARCENY-THEFT DAY'] + +data[0]['LARCENY-THEFT NIGHT'];
-      let countBothB = +data[0]['BURGLARY DAY'] + +data[0]['BURGLARY NIGHT'];
-      let countBothMVT = +data[0]['MOTOR-VEHICLE THEFT DAY'] + +data[0]['MOTOR-VEHICLE THEFT NIGHT'];
-      let countBothAA = +data[0]['AGGRAVATED ASSAULT DAY'] + +data[0]['AGGRAVATED ASSAULT NIGHT'];
-      let countBothDO = +data[0]['DRUG OFFENSE DAY'] + +data[0]['DRUG OFFENSE NIGHT'];
-      let countBothO = +data[0]['OTHER DAY'] + +data[0]['OTHER NIGHT'];
+      // let countBothLT = +data[0]['LARCENY-THEFT DAY'] + +data[0]['LARCENY-THEFT NIGHT'];
+      // let countBothB = +data[0]['BURGLARY DAY'] + +data[0]['BURGLARY NIGHT'];
+      // let countBothMVT = +data[0]['MOTOR-VEHICLE THEFT DAY'] + +data[0]['MOTOR-VEHICLE THEFT NIGHT'];
+      // let countBothAA = +data[0]['AGGRAVATED ASSAULT DAY'] + +data[0]['AGGRAVATED ASSAULT NIGHT'];
+      // let countBothDO = +data[0]['DRUG OFFENSE DAY'] + +data[0]['DRUG OFFENSE NIGHT'];
+      // let countBothO = +data[0]['OTHER DAY'] + +data[0]['OTHER NIGHT'];
+
+      // Creates the x-axis & y-axis scales
+      const xAxis = d3.scaleBand()
+        .domain(dayData.map(d => d.type))
+        .range([0, width])
+        .padding(barPadding);
+
+      const yAxis = d3.scaleLinear()
+        .domain([0, d3.max(dayData, d => d.count)])
+        .nice()
+        .range([height, 0]);
+
+        const category = ["Larceny-Theft", "Burglary", "Motor-Vehicle Theft"];
+      const colors = d3.scaleOrdinal()
+      .domain(category)
+      .range(["#FDDA0D","#3c005a"]);
+
+      svg1.selectAll(".bar")
+        .data(dayData)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => xAxis(d.type))
+        .attr("y", d => yAxis(d.count))
+        .attr("width", xAxis.bandwidth())
+        .attr("height", d => height - yAxis(d.count))
+        .attr("fill", d => colors(d.type));
+
+      svg1.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xAxis));
+  
+      svg1.append("g")
+        .call(d3.axisLeft(yAxis));
+      
 
       
 }) .catch(function(error) {
