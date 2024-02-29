@@ -140,7 +140,7 @@ const svg2 = d3.select("#chart2").append("svg")
         "BURGLARY": +data[0]["BURGLARY DAY"],
         "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT DAY"],
         "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT DAY"],
-        "DRUG OFFENSE": +data[0]["DRUG OFFENSE"],
+        "DRUG OFFENSE": +data[0]["DRUG OFFENSE DAY"],
         "OTHER": +data[0]["OTHER DAY"]
       };
 
@@ -153,6 +153,14 @@ const svg2 = d3.select("#chart2").append("svg")
         "OTHER": +data[0]["OTHER NIGHT"]
       };
       
-      
+      let countBothLT = +data[0]['LARCENY-THEFT DAY'] + +data[0]['LARCENY-THEFT NIGHT'];
+      let countBothB = +data[0]['BURGLARY DAY'] + +data[0]['BURGLARY NIGHT'];
+      let countBothMVT = +data[0]['MOTOR-VEHICLE THEFT DAY'] + +data[0]['MOTOR-VEHICLE THEFT NIGHT'];
+      let countBothAA = +data[0]['AGGRAVATED ASSAULT DAY'] + +data[0]['AGGRAVATED ASSAULT NIGHT'];
+      let countBothDO = +data[0]['DRUG OFFENSE DAY'] + +data[0]['DRUG OFFENSE NIGHT'];
+      let countBothO = +data[0]['OTHER DAY'] + +data[0]['OTHER NIGHT'];
 
-  })
+      
+}) .catch(function(error) {
+      console.error("Error loading the CSV file:", error);
+});
