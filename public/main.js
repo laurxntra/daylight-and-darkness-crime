@@ -89,7 +89,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
                 .duration(100)
                 .style("opacity", 0);
         });
-// testing VS
+
     // Adds x-axis and title for x-axis
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
