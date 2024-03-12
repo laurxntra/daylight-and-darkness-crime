@@ -27,7 +27,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         time: "Day",
         ...Object.fromEntries(dayKeys.map(key => [key, +data[0][key]]))
     };
-//testing
+
     const nightData = {
         time: "Night",
         ...Object.fromEntries(nightKeys.map(key => [key, +data[0][key]]))
@@ -43,7 +43,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
     const xAxis = d3.scaleBand()
         .domain(["Day", "Night"])
         .range([0, width])
-        .paddingInner(0.1);
+        .padding(0.1);
 
     const yAxis = d3.scaleLinear()
         .domain([0, d3.max(stackData, d => d3.max(d, d => d[1]))])
@@ -59,13 +59,14 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
             .attr("class", "grid")
             .call(d3.axisLeft(yAxis)
             .tickSize(-width)
-            .tickFormat("")
+            .tickFormat("-")
     );
         
     // Creates stacked bars
     svg.selectAll(".bar")
         .data(stackData)
-        .enter().append("g")
+        .enter()
+        .append("g")
         .attr("fill", d => colors(d.key))
         .selectAll("rect")
         .data(d => d)
@@ -127,7 +128,8 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("transform", "translate(" + (width + 15) + ",20)")
         .selectAll("g")
         .data(legendKeys)
-        .enter().append("g")
+        .enter()
+        .append("g")
         .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
 
     legend.append("rect")
@@ -143,7 +145,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
 
 // checking for errors
 }).catch(function(error) {
-    console.error("Error loading the CSV file:", error);
+    console.error("Error:", error);
 });
 
 // /* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
