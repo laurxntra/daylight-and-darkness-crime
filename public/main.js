@@ -24,12 +24,12 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
     const nightKeys = ["LARCENY-THEFT NIGHT", "MOTOR-VEHICLE THEFT NIGHT", "AGGRAVATED ASSAULT NIGHT", "DRUG OFFENSE NIGHT"];
 
     const dayData = {
-        time: "DAY",
+        time: "Day",
         ...Object.fromEntries(dayKeys.map(key => [key, +data[0][key]]))
     };
 
     const nightData = {
-        time: "NIGHT",
+        time: "Night",
         ...Object.fromEntries(nightKeys.map(key => [key, +data[0][key]]))
     };
 
@@ -41,7 +41,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
 
     // Define scales for x-axis and y-axis
     const xAxis = d3.scaleBand()
-        .domain(["DAY", "NIGHT"])
+        .domain(["Day", "Night"])
         .range([0, width])
         .paddingInner(0.1);
 
