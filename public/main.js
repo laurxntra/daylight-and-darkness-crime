@@ -114,12 +114,19 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
      // Adds the title for the chart
     svg.append("text")
         .attr("x", (width / 2))
-        .attr("y", 10 - (margin.top / 2))
+        .attr("y", 10 - (margin.top / 1.5))
         .attr("text-anchor", "middle")
         .style("font-size", "20px")
         .style("text-decoration", "underline")
         .style("font-weight", "bold")
         .text("Total Crime in One Month: Day vs. Night");
+
+        svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 10 - (margin.top / 2) + 10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Day: 5:00 AM - 8:00 PM | Night: 5:00 PM - 8:00 AM");
 
     // creates the legend
     const legendKeys = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
