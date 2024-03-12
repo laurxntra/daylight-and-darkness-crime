@@ -1,3 +1,11 @@
+// /* THIS SECTION IS FOR VISUALIZATION #1. SCROLL DOWN FOR VISUALIZATION #1 */
+
+// tooltip allows the interactive to start
+const tooltip = d3.select("#chart1").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("transition", "opacity 0.3s");
+
 // Set up dimensions for the chart
 const margin = { top: 100, right: 200, bottom: 60, left: 200 };
 const width = 1000 - margin.left - margin.right;
@@ -45,8 +53,15 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
     // Colors for bars/legend
     const colors = d3.scaleOrdinal()
         .domain(dayKeys.concat(nightKeys))
-        .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]);
+        .range(["#ADD8E6", "#949494", "#702963", "#007500"]);
 
+        svg.append("g")
+            .attr("class", "grid")
+            .call(d3.axisLeft(yAxis)
+            .tickSize(-width)
+            .tickFormat("")
+    );
+        
     // Creates stacked bars
     svg.selectAll(".bar")
         .data(stackData)
@@ -58,7 +73,22 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("x", d => xAxis(d.data.time))
         .attr("y", d => yAxis(d[1]))
         .attr("height", d => yAxis(d[0]) - yAxis(d[1]))
-        .attr("width", xAxis.bandwidth());
+        .attr("width", xAxis.bandwidth())
+        .on("mouseover", function(event, d) {
+            const crimeType = d3.select(this.parentNode).datum().key;
+            const crimeCount = d[1] - d[0];
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            tooltip.html(crimeType + ": " + crimeCount)
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            tooltip.transition()
+                .duration(100)
+                .style("opacity", 0);
+        });
 
     // Adds x-axis and title for x-axis
     svg.append("g")
@@ -67,21 +97,22 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .style("font-weight", "bold")
         .call(d3.axisBottom(xAxis));
 
+    
     // Add y-axis and title for y-axis
     svg.append("g")
         .call(d3.axisLeft(yAxis));
       
     svg.append("text")
-    .attr("transform", "rotate(-90)")
-      .attr("x", -height / 2)
-     .attr("y", -margin.left + 150)
-     .style("text-anchor", "middle")
-     .style("font-weight", "bold")
-     .text("Number of Crimes in One Month");
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -margin.left + 150)
+        .style("text-anchor", "middle")
+        .style("font-weight", "bold")
+        .text("Number of Crimes in One Month");
 
      // Adds the title for the chart
     svg.append("text")
-      .attr("x", (width / 2))
+        .attr("x", (width / 2))
         .attr("y", 10 - (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "20px")
@@ -89,35 +120,31 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .style("font-weight", "bold")
         .text("Total Crime in One Month: Day vs. Night");
 
-// creates the legend
-const legendKeys = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
-const legend = svg.append("g")
-    .attr("class", "legend")
-    .attr("transform", "translate(" + (width + 50) + ",20)")
-    .selectAll("g")
-    .data(legendKeys)
-    .enter().append("g")
-    .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
+    // creates the legend
+    const legendKeys = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
+    const legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + (width + 50) + ",20)")
+        .selectAll("g")
+        .data(legendKeys)
+        .enter().append("g")
+        .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
 
-legend.append("rect")
-    .attr("width", 18)
-    .attr("height", 18)
-    .attr("fill", d => colors(d));
+    legend.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .attr("fill", d => colors(d));
 
-legend.append("text")
-    .attr("x", 24)
-    .attr("y", 9)
-    .attr("dy", ".35em")
-    .text(d => d);
+    legend.append("text")
+        .attr("x", 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text(d => d);
 
-// checking for errors
+    // checking for errors
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
-
-
-
-
 
 // /* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
 

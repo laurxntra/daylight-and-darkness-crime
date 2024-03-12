@@ -33,3 +33,16 @@ h1 {
 a {
   text-decoration: none;
 }
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: auto;
+  height: auto;
+  padding: 10px; 
+  font: 14px sans-serif; 
+  background: #FFFFFF;
+  border: 1px solid #aaa;
+  border-radius: 8px; 
+  pointer-events: none;
+}
