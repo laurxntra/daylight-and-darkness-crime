@@ -124,7 +124,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
     const legendKeys = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
     const legend = svg.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width + 50) + ",20)")
+        .attr("transform", "translate(" + (width + 15) + ",20)")
         .selectAll("g")
         .data(legendKeys)
         .enter().append("g")
@@ -138,10 +138,10 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
     legend.append("text")
         .attr("x", 24)
         .attr("y", 9)
-        .attr("dy", ".35em")
+        .attr("dy", ".25em")
         .text(d => d);
 
-    // checking for errors
+// checking for errors
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
