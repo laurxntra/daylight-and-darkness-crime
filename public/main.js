@@ -159,6 +159,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
 
 // /* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
 
+// Set up dimensions for the chart
 const margin2 = { top: 100, right: 300, bottom: 60, left: 200 };
 const width2 = 1100 - margin2.left - margin2.right;
 const height2 = 600 - margin2.top - margin2.bottom;
@@ -169,33 +170,50 @@ const svg2 = d3.select("#chart2").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-// Load data from CSV
+// This extracts the crime types from the data
 d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.csv.csv").then(function(data) {
+    
     const xAxisName = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
     const dayKeys = ["LARCENY-THEFT DAY", "MOTOR-VEHICLE THEFT DAY", "AGGRAVATED ASSAULT DAY", "DRUG OFFENSE DAY"];
     const nightKeys = ["LARCENY-THEFT NIGHT", "MOTOR-VEHICLE THEFT NIGHT", "AGGRAVATED ASSAULT NIGHT", "DRUG OFFENSE NIGHT"];
     
-    const dayData = xAxisName.map((label, i) => ({ crime: label, time: "Day", count: +data[0][dayKeys[i]] }));
-    const nightData = xAxisName.map((label, i) => ({ crime: label, time: "Night", count: +data[0][nightKeys[i]] }));
+    const dayData = xAxisName.map((label, i) => ({
+        crime: label,
+        time: "Day",
+        count: +data[0][dayKeys[i]]
+    }));
+
+    const nightData = xAxisName.map((label, i) => ({
+        crime: label,
+        time: "Night",
+        count: +data[0][nightKeys[i]]
+    }));
     
     const stackData = [...dayData, ...nightData];
-    
 
-    // Defines the scales
-    const x = d3.scaleBand()
+    // Defines x-axis/y-axis 
+    const xAxis = d3.scaleBand()
         .domain(stackData.map(d => d.crime))
         .range([0, width2])
         .padding(0.1);
 
-    const y = d3.scaleLinear()
+    const yAxis = d3.scaleLinear()
         .domain([0, d3.max(stackData, d => d.count)])
         .nice()
         .range([height2, 0]);
 
+    // Colors for the bars
     const colors = d3.scaleOrdinal()
         .domain(["Day", "Night"])
         .range(["#FFBA00", "#00008B"]);
     
+    // Creates background ticks
+    svg2.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(yAxis)
+        .tickSize(-width2)
+        .tickFormat("-"))
+        .selectAll(".tick line")
 
     // Creates the grouped bar chart
     svg2.selectAll(".bar")
@@ -203,25 +221,22 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .enter()
         .append("rect")
         .attr("class", "bar")
-        .attr("x", d => x(d.crime) + (x.bandwidth() / 2 * (d.time === "Day" ? 0 : 1)))
-        .attr("y", d => y(d.count))
-        .attr("width", x.bandwidth() / 2)
-        .attr("height", d => height2 - y(d.count))
+        .attr("x", d => xAxis(d.crime) + (xAxis.bandwidth() / 2 * (d.time === "Day" ? 0 : 1)))
+        .attr("y", d => yAxis(d.count))
+        .attr("width", xAxis.bandwidth() / 2)
+        .attr("height", d => height2 - yAxis(d.count))
         .attr("fill", d => colors(d.time));
     
-        
-    // Adds the xAxis
     svg2.append("g")
         .attr("transform", "translate(0," + height2 + ")")
         .style("font-size", "12px")
         .style("font-weight", "bold")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(xAxis));
 
-    
-    // Add the yAxis
     svg2.append("g")
-        .call(d3.axisLeft(y));
-      
+        .call(d3.axisLeft(yAxis));
+    
+    // Creates the y-axis label
     svg2.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height2 / 2)
@@ -230,7 +245,8 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .style("font-weight", "bold")
         .text("Number of Crimes in One Month");
 
-        svg2.append("text")
+    // Creates title 
+    svg2.append("text")
         .attr("x", (width / 2))
         .attr("y", 10 - (margin.top / 1.5))
         .attr("text-anchor", "middle")
@@ -239,13 +255,13 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .style("font-weight", "bold")
         .text("Crimes in One Month");
 
-        svg2.append("text")
+    // Creates the description beneath the title
+    svg2.append("text")
         .attr("x", (width / 2))
         .attr("y", 10 - (margin.top / 2) + 10)
         .attr("text-anchor", "middle")
         .style("font-size", "14px")
         .text("Day: 5:00 AM - 8:00 PM | Night: 5:00 PM - 8:00 AM");
-
 
     // Creates the legends
     const legend = svg2.append("g")
@@ -258,14 +274,14 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("transform", (d, i) => "translate(0," + i * 25 + ")");
 
     legend.append("rect")
-        .attr("x", width2 - 19)
+        .attr("x", width2 - 5)
         .attr("width", 19)
         .attr("height", 19)
         .attr("fill", colors);
 
     legend.append("text")
-        .attr("x", width2 + 3)
-        .attr("y", 9.5)
+        .attr("x", width2 + 20)
+        .attr("y", 10)
         .attr("dy", "0.32em")
         .text(d => d);
 
