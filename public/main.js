@@ -78,6 +78,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("height", d => yAxis(d[0]) - yAxis(d[1]))
         .attr("width", xAxis.bandwidth())
         .on("mouseover", function(event, d) {
+            d3.select(this).style("opacity", 0.8);
             const crimeType = d3.select(this.parentNode).datum().key;
             const crimeCount = d[1] - d[0];
             tooltip.transition()
@@ -88,6 +89,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
                 .style("top", (event.pageY - 28) + "px");
         })
         .on("mouseout", function(d) {
+            d3.select(this).style("opacity", 1);
             tooltip.transition()
                 .duration(100)
                 .style("opacity", 0);
@@ -159,8 +161,15 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
 
 // /* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
 
+// tooltip allows the interactive to start
+const tooltip2 = d3.select("#chart2")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("transition", "opacity 0.4s");
+
 // Set up dimensions for the chart
-const margin2 = { top: 100, right: 300, bottom: 60, left: 200 };
+const margin2 = { top: 80, right: 300, bottom: 60, left: 150 };
 const width2 = 1100 - margin2.left - margin2.right;
 const height2 = 600 - margin2.top - margin2.bottom;
 
@@ -225,7 +234,23 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("y", d => yAxis(d.count))
         .attr("width", xAxis.bandwidth() / 2)
         .attr("height", d => height2 - yAxis(d.count))
-        .attr("fill", d => colors(d.time));
+        .attr("fill", d => colors(d.time))
+        .on("mouseover", function(event, d) {
+            d3.select(this).style("opacity", 0.8);
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            tooltip.html("Occurrences: " + d.count)
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).style("opacity", 1);
+            tooltip.transition()
+                .duration(100)
+                .style("opacity", 0);
+        });
+        
     
     svg2.append("g")
         .attr("transform", "translate(0," + height2 + ")")
@@ -240,14 +265,14 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
     svg2.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height2 / 2)
-        .attr("y", -margin2.left + 150)
+        .attr("y", -margin2.left + 100)
         .style("text-anchor", "middle")
         .style("font-weight", "bold")
         .text("Number of Crimes in One Month");
 
     // Creates title 
     svg2.append("text")
-        .attr("x", (width / 2))
+        .attr("x", (width / 1.8))
         .attr("y", 10 - (margin.top / 1.5))
         .attr("text-anchor", "middle")
         .style("font-size", "20px")
@@ -257,7 +282,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
 
     // Creates the description beneath the title
     svg2.append("text")
-        .attr("x", (width / 2))
+        .attr("x", (width / 1.8))
         .attr("y", 10 - (margin.top / 2) + 10)
         .attr("text-anchor", "middle")
         .style("font-size", "14px")
