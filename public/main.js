@@ -157,75 +157,84 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
 
 // /* THIS SECTION IS FOR VISUALIZATION #2. SCROLL UP FOR VISUALIZATION #1 */
 
-// const svg2 = d3.select("#chart2").append("svg")
-//   .attr("width", width + margin.left + margin.right)
-//   .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+const margin2 = { top: 100, right: 300, bottom: 60, left: 200 };
+const width2 = 1100 - margin2.left - margin2.right;
+const height2 = 600 - margin2.top - margin2.bottom;
 
-//   d3.csv("data/types-of-crimes-totals - Sheet1.csv").then(function(data) {
-//       const dayData = [
-//         {type: 'LARCENY-THEFT', count: data[0]["LARCENY-THEFT DAY"]},
-//         {type: 'BURGLARY', count: data[0]["BURGLARY DAY"]},
-//         {type: 'MOTOR-VEHICLE THEFT', count: data[0]["MOTOR-VEHICLE THEFT DAY"]}
-//         // "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT DAY"],
-//         // "DRUG OFFENSE": +data[0]["DRUG OFFENSE DAY"],
-//         // "OTHER": +data[0]["OTHER DAY"]
-//       ];
+const svg2 = d3.select("#chart2").append("svg")
+    .attr("width", width2 + margin2.left + margin2.right)
+    .attr("height", height2 + margin2.top + margin2.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-//       // const nightData = {
-//       //   "LARCENY-THEFT": +data[0]["LARCENY-THEFT NIGHT"],
-//       //   "BURGLARY": +data[0]["BURGLARY NIGHT"],
-//       //   "MOTOR-VEHICLE THEFT": +data[0]["MOTOR-VEHICLE THEFT NIGHT"],
-//       //   "AGGRAVATED ASSAULT": +data[0]["AGGRAVATED ASSAULT NIGHT"],
-//       //   "DRUG OFFENSE": +data[0]["DRUG OFFENSE NIGHT"],
-//       //   "OTHER": +data[0]["OTHER NIGHT"]
-//       // };
-      
-//       // let countBothLT = +data[0]['LARCENY-THEFT DAY'] + +data[0]['LARCENY-THEFT NIGHT'];
-//       // let countBothB = +data[0]['BURGLARY DAY'] + +data[0]['BURGLARY NIGHT'];
-//       // let countBothMVT = +data[0]['MOTOR-VEHICLE THEFT DAY'] + +data[0]['MOTOR-VEHICLE THEFT NIGHT'];
-//       // let countBothAA = +data[0]['AGGRAVATED ASSAULT DAY'] + +data[0]['AGGRAVATED ASSAULT NIGHT'];
-//       // let countBothDO = +data[0]['DRUG OFFENSE DAY'] + +data[0]['DRUG OFFENSE NIGHT'];
-//       // let countBothO = +data[0]['OTHER DAY'] + +data[0]['OTHER NIGHT'];
+// Load data from CSV
+d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.csv.csv").then(function(data) {
+    const customLabels = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
+    const dayKeys = ["LARCENY-THEFT DAY", "MOTOR-VEHICLE THEFT DAY", "AGGRAVATED ASSAULT DAY", "DRUG OFFENSE DAY"];
+    const nightKeys = ["LARCENY-THEFT NIGHT", "MOTOR-VEHICLE THEFT NIGHT", "AGGRAVATED ASSAULT NIGHT", "DRUG OFFENSE NIGHT"];
+    
+    const dayData = customLabels.map((label, i) => ({ crime: label, time: "Day", count: +data[0][dayKeys[i]] }));
+    const nightData = customLabels.map((label, i) => ({ crime: label, time: "Night", count: +data[0][nightKeys[i]] }));
+    
+    const stackData = [...dayData, ...nightData];
+    
 
-//       // Creates the x-axis & y-axis scales
-//       const xAxis = d3.scaleBand()
-//         .domain(dayData.map(d => d.type))
-//         .range([0, width])
-//         .padding(barPadding);
+    // Defines the scales
+    const x = d3.scaleBand()
+        .domain(stackData.map(d => d.crime))
+        .range([0, width2])
+        .padding(0.1);
 
-//       const yAxis = d3.scaleLinear()
-//         .domain([0, d3.max(dayData, d => d.count)])
-//         .nice()
-//         .range([height, 0]);
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(stackData, d => d.count)])
+        .nice()
+        .range([height2, 0]);
 
-//       const category = ["Larceny-Theft", "Burglary", "Motor-Vehicle Theft"];
-//       const colors = d3.scaleOrdinal()
-//       .domain(category)
-//       .range(["#FDDA0D","#3c005a"]);
+    const colors = d3.scaleOrdinal()
+        .domain(["Day", "Night"])
+        .range(["#FFBA00", "#00008B"]);
 
-//       svg1.selectAll(".bar")
-//         .data(dayData)
-//         .enter()
-//         .append("rect")
-//         .attr("class", "bar")
-//         .attr("x", d => xAxis(d.type))
-//         .attr("y", d => yAxis(d.count))
-//         .attr("width", xAxis.bandwidth())
-//         .attr("height", d => height - yAxis(d.count))
-//         .attr("fill", d => colors(d.type));
+    // Creates the grouped bar chart
+    svg2.selectAll(".bar")
+        .data(stackData)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => x(d.crime) + (x.bandwidth() / 2 * (d.time === "Day" ? 0 : 1)))
+        .attr("y", d => y(d.count))
+        .attr("width", x.bandwidth() / 2)
+        .attr("height", d => height2 - y(d.count))
+        .attr("fill", d => colors(d.time));
+    
+    // Adds the xAxis
+    svg2.append("g")
+        .attr("transform", "translate(0," + height2 + ")")
+        .call(d3.axisBottom(x));
 
-//       svg1.append("g")
-//         .attr("transform", "translate(0," + height + ")")
-//         .call(d3.axisBottom(xAxis));
-  
-//       svg1.append("g")
-//         .call(d3.axisLeft(yAxis));
-      
+    // Add the yAxis
+    svg2.append("g")
+        .call(d3.axisLeft(y));
 
-      
-// }) .catch(function(error) {
-//       console.error("Error loading the CSV file:", error);
-// });
+    // Creates the legends
+    const legend = svg2.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(20,20)")
+        .selectAll("g")
+        .data(["Day", "Night"])
+        .enter()
+        .append("g")
+        .attr("transform", (d, i) => "translate(0," + i * 25 + ")");
 
+    legend.append("rect")
+        .attr("x", width2 - 19)
+        .attr("width", 19)
+        .attr("height", 19)
+        .attr("fill", colors);
+
+    legend.append("text")
+        .attr("x", width2 + 3)
+        .attr("y", 9.5)
+        .attr("dy", "0.32em")
+        .text(d => d);
+
+});
