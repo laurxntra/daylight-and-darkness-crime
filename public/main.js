@@ -130,7 +130,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("y", 10 - (margin.top / 2) + 10)
         .attr("text-anchor", "middle")
         .style("font-size", "14px")
-        .text("Day: 5:00 AM - 8:00 PM | Night: 5:00 PM - 8:00 AM");
+        .text("Location: Phoenix, Arizona | Day: 5:00 AM - 8:00 PM | Night: 5:00 PM - 8:00 AM");
 
     // creates the legend
     const legendKeys = ["Larceny Theft", "Motor Vehicle Theft", "Aggravated Assault", "Drug Offense"];
@@ -286,7 +286,7 @@ d3.csv("data/types-of-crimes-totals - Sheet1 - types-of-crimes-totals - Sheet1.c
         .attr("y", 10 - (margin.top / 2) + 10)
         .attr("text-anchor", "middle")
         .style("font-size", "14px")
-        .text("Day: 5:00 AM - 8:00 PM | Night: 5:00 PM - 8:00 AM");
+        .text("Location: Phoenix, Arizona | Day: 5:00 AM - 8:00 PM | Night: 5:00 PM - 8:00 AM");
 
     // Creates the legends
     const legend = svg2.append("g")
